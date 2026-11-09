@@ -1,0 +1,29 @@
+# a clone of the Unix command `find`, written in steel
+
+# WORKING_DIR is an alias for the current directory
+dir = take WORKING_DIR
+
+main = lst[str] ->
+    in.1 | filter_recursive dir | out
+-> str
+
+filter_recursive = lst[str] ->
+    # splits the directory into pieces and processes each file in parralel
+    dir -< {
+        # gets the path of the file, appends a newline, and deletes it if it doesn't contain
+        # in.1, otherwise outputting it
+        File(file) => file | get_path | append "\n" | filter in.0
+        # if the file is a directory, then spin up another instance of the system to process it
+        Dir(nested) => nested | filter_recursive
+    } >- out
+    # write the entire output of everything to out
+    # the output is unordered, but whatever, it'll be fast af
+-> Maybe[str]
+
+# copied and pasted from ./grep.steel
+filter = lst[str] ->
+    in | {
+        in.0 | conts in.1 => in.0 | out
+        else => terminate
+    }
+-> Maybe[str]

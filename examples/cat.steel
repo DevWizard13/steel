@@ -1,0 +1,26 @@
+# a clone of the Unix command `cat`, written in steel
+
+# declares the program uses the file at the first command argument for the full lifetime
+# `take` locks a system resource (file) for the entire lifetime of the program when it
+# launches and crashes if it doesn't work
+file = take in.1 | out
+# in.0 is stdin, in.1 and later are arguments
+
+# `=` binds a value to a name, creating an immutable variable lasting the full scope
+# variables are specific data types that can be written to using |>
+# no variables are used in this example, but you'd use `my_var = cool_system | var`
+# the term var creates a writable region of memory from input
+
+# the program is a set of declarations, which bind values to names (variables)
+# the part that actually runs is the variable `main`, which executes the system
+# bound to it (you could also have a value, but that would be pointless)
+# `|` pipes the output of the last system into the input of the next like shell
+
+# this is a system, which has an input type (accessed as `in`, read only), a body (which does process),
+# and an output type (accessed as `out`, write only), written as in_type -> body -> out_type
+# all systems taking input from `in' are triggered at once, but that's only one here, more on that in grep
+main = lst[str] ->
+    in | as_str | out
+-> str
+
+# you probably figured it out but # is a comment

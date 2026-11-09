@@ -1,0 +1,6 @@
+[workspace]
+name = "steel"
+resolver = "3"
+version = "0.1.0"
+edition = "2024"
+members = ["dagger","libsteel","mine"]

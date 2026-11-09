@@ -1,0 +1,22 @@
+# a clone of the Unix command `nl`, written in steel
+
+# imports a library
+# library paths are formatted as file paths, std being an alias for the standard library
+use std.sort.SortType
+
+main = lst[str] ->
+    # `collect` waits until all instances of the previous command are done and returns a list
+    # here we also see an enum being used, specifically SortType.Numerical, to specify sorting
+    in.0 | split "\n" | enumerate -< number >- sort_by SortType.Numerical | out
+
+    # we could also do in.0 | split "\n" | itr number | concatenate | out
+    # that demonstrates ordered processing, but it's also boring and slow
+    # and yes, you saw that right, itr takes a system as input, a lambda would
+    # also work but that would be big and I already wrote the function
+-> str
+
+# yes, it has tuples
+number = (i64, str) ->
+    num = in.0 | as_str
+    in.1 | append num | out
+-> str

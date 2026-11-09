@@ -1,0 +1,14 @@
+# a clone of the Unix command `cp`, written in steel
+
+from = take in.1
+
+main = lst[str] ->
+    # create_file_w creates a file and automatically gives the program write access
+    # it returns a Result-like type
+    create_file_w in.2 | {
+        # |> writes to a writable item
+        # `in1` is the input into the match, in2 etc would be used for nested ones
+        Ok(to) => from | as_str |> in1
+        Err(e) => panic "error creating file: " e
+    }
+-> ()

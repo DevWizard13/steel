@@ -1,0 +1,34 @@
+# a clone of the Unix command `grep`, written in steel
+# if you're new here, you should look at ./cat.steel first
+
+main = lst[str] ->
+    # -< is one of the most common operators, it splits a collection and spawns a thread to
+    # process each item in parralel
+    # also, expressions that start with ':' are junctions, which you can think of as links that
+    # connect the end of lines to the start of others, so any line that starts with :ln will
+    # be triggered when a line that ends with :ln ends and will take the output, also they
+    # run in parralel
+    in | split "\n" -< :ln
+
+    # in.0 is stdin, in.1..infinity are arguments
+    # also, all of these run at the same time so the output will be unordered because of split
+    # lists and other iterables are automatically processed in parralel
+    # you could use ordered to do it, but this would defeat the point of the language and slow it down
+    # >- takes the stream output of parralel systems and turns it into a list when all systems complete
+    :ln | filter in.1 >- out
+-> str
+
+filter = lst[str] ->
+    # {}s function as both if/elif/else and match
+    # => triggers code when something is true, this is seen here and elsewhere
+    in | {
+        in.0 | conts in.1 => in.0 | out
+        else => terminate
+    }
+-> Maybe[str]
+# []s are for generics <>s would get confusing
+# also, Maybe means that the command doesn't have to complete and it will
+# just terminate the thread it's on if it doesn't
+# in the event of termination, the output is not included in the stream
+# of output and it's like it didn't run at all, so it's not for catching errors,
+# it's just easier than filtering unwanted outputs from a list sequentially

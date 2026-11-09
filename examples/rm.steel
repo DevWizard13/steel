@@ -1,0 +1,14 @@
+# a clone of the Unix command `rm`, written in steel
+
+main = lst[str] ->
+    # borrow is like take, only at runtime, and it returns an optional
+    # take would be much more suited for the situation, borrow should only be used
+    # when you don't know what resource you want to borrow when it launches
+    # but I wanted to demonstrate it and rust-like match functionality
+    # also, the file is borrowed for writing, so the w is required, you'd do the same for take
+    borrow_w in.1 | {
+        # algrebraic data types are supported
+        Some(file) => file.delete
+        None => panic "could not find file"
+    }
+-> ()
