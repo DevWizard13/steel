@@ -1,16 +1,25 @@
 use std::collections::HashMap;
 
+#[derive(Debug)]
 pub struct Ast(Vec<Dec>);
 
+impl Ast {
+    pub fn new(v: Vec<Dec>) -> Ast {
+        Ast(v)
+    }
+}
+
+#[derive(Debug)]
 pub struct Dec {
     pub id: String,
     pub val: Val,
 }
 
+#[derive(Debug)]
 pub enum Type {
     Int,
     Str,
-    Num,
+    Flt,
     Cha,
     Boo,
     Lst(Box<Type>),
@@ -19,41 +28,32 @@ pub enum Type {
     Cmd(Box<Type>, Box<Type>),
 }
 
+#[derive(Debug)]
 pub enum Val {
-    Int(Int),
-    Str(Str),
-    Num(Num),
-    Cha(Cha),
-    Boo(Boo),
-    Lst(Lst),
-    Map(Map),
-    Tup(Tup),
+    Int(i64),
+    Str(String),
+    Flt(f64),
+    Cha(char),
+    Boo(bool),
+    Lst(Vec<Val>),
+    Map(HashMap<Val, Val>),
+    Tup(Vec<Val>),
     Sys(Sys),
 }
 
-impl Val {
-    fn from<T>(v: T) {
-        match v {}
-    }
-}
-
-pub struct Int(i64);
-pub struct Str(String);
-pub struct Num(f64);
-pub struct Cha(char);
-pub struct Boo(bool);
-pub struct Lst(Vec<Val>);
-pub struct Tup(Vec<Val>);
-pub struct Map(HashMap<Val, Val>);
+#[derive(Debug)]
 pub struct Blk(Vec<Line>);
+#[derive(Debug)]
 pub struct Line(Vec<LnElem>);
 
+#[derive(Debug)]
 pub struct Sys {
     pub input: Type,
     pub block: Blk,
     pub out: Type,
 }
 
+#[derive(Debug)]
 pub enum LnElem {
     Cmd(Cmd),
     Pipe,
@@ -62,9 +62,11 @@ pub enum LnElem {
     Combine,
 }
 
+#[derive(Debug)]
 pub struct Cmd {
     pub main: Acc,
     pub args: Vec<Acc>,
 }
 
+#[derive(Debug)]
 pub struct Acc(Vec<String>);
