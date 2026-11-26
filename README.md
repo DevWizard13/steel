@@ -82,3 +82,60 @@ Zed does this, and Zed is also the best editor I've ever used. It's like if
 the people who made VS Code actually cared, used high-performance tools, and
 actually considered people who like vim keybindings. I use recommend it. IMO,
 it's for you regardless of if you're a power user or just a regular programmer.
+
+## Style Guides
+
+Since I'm the one running the project, I made the style guide a collection
+of all my hottest takes and wildest ideas. Be warned, it's very unusual.
+Basically, it's as follows:
+
+- snake_case for variable and system names
+- Try to make all variables the same length for alignment
+- Use spaces as padding to keep everything aligned
+- Use tabs as indent so it displays well on all screen sizes
+
+So good code will look as follows:
+
+```
+first = tru
+secnd = fal
+in |
+	"hi" => "hello" | out
+	"by" => "bye"   | out
+```
+
+and bad code would be:
+
+```
+first = tru
+second = fal
+in |
+    "hi" => "hello" | out
+    "bye" => "bye" | out
+```
+
+One could argue that the second is more readable to
+non-programmers than the first, and they'd be correct!
+But guess what: we're all programmers here! The reason
+I picked this is because the second is *much* easier to
+edit with a column editor like Ctrl+V in (n)vim or Zed.
+Say you wanted to change all instances of out to, say,
+print or something (maybe you wrote a custom function).
+Properly following the style guides makes that much easier.
+
+I picked tabs because they can be adjusted to display
+in a way that's best for the window size rather than
+whatever one person's editor window size is. In multi-gig
+projects, tabs can also make a noticable difference in
+project size. They're just better overall.
+
+It'll feel natural once you get used to it.
+
+## Copyright
+
+Copyright (c) 2026-present DevWizard and contributers
+
+This is free software, provided under GPL v3 or a later
+version of the GPL licence. See LICENCE for details. Some
+sections of code may be provided under a different licence.
+See those individually.

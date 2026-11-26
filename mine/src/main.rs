@@ -18,9 +18,14 @@ parser! {
     flt: decimal=<num+ "." num*> ->
         Val { Val::Flt(decimal.parse::<f64>().expect("Faliled to parse flt"))}
     cha: "'" c=str_char "'" -> Val { Val::Cha(c) }
-    pub boo: b=<"tru"|"fal"> -> Val { let hi = if b == "tru" {Val::Boo(true)} else {Val::Boo(false)};
-        println!("{:?}", hi); hi}
-    //pub boo = match { "fal" => Val::Boo(false),"tru" => Val::Boo(true),} -> Val;
+    boo = match { "fal" => Val::Boo(false),"tru" => Val::Boo(true),} -> Val;
+    typ = match {
+        "int" => Type::Int,
+        "str" => Type::Str,
+        "flt" => Type::Flt,
+        "cha" => Type::Cha,
+        "boo" => Type::Boo,
+    } -> Type;
 
     str_char=("\\" escape | [^"\"\\"]) -> char;
     escape = match {

@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, str::FromStr};
 
 #[derive(Debug)]
 pub struct Ast(Vec<Dec>);
@@ -25,8 +25,26 @@ pub enum Type {
     Lst(Box<Type>),
     Tup(Vec<Type>),
     Map(Box<Type>, Box<Type>),
-    Cmd(Box<Type>, Box<Type>),
+    Sys(Box<Type>, Box<Type>),
 }
+
+impl FromStr for Type {
+    type Err = TypeErr;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "int" => Ok(Type::Int),
+            "str" => Ok(Type::Str),
+            "flt" => Ok(Type::Flt),
+            "cha" => Ok(Type::Cha),
+            "boo" => Ok(Type::Boo),
+            unknown => Err(TypeErr(unknown.to_string())),
+        }
+    }
+}
+
+#[derive(Debug)]
+pub struct TypeErr(String);
 
 #[derive(Debug)]
 pub enum Val {
