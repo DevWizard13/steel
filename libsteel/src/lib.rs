@@ -1,6 +1,8 @@
+use ron::*;
+use serde::{self, Deserialize, Serialize};
 use std::{collections::HashMap, str::FromStr};
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct Ast(Vec<Dec>);
 
 impl Ast {
@@ -9,13 +11,13 @@ impl Ast {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct Dec {
     pub id: String,
     pub val: Val,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub enum Type {
     Int,
     Str,
@@ -26,6 +28,7 @@ pub enum Type {
     Tup(Vec<Type>),
     Map(Box<Type>, Box<Type>),
     Sys(Box<Type>, Box<Type>),
+    Custom(String, Vec<Type>),
 }
 
 impl FromStr for Type {
@@ -43,10 +46,10 @@ impl FromStr for Type {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct TypeErr(String);
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub enum Val {
     Int(i64),
     Str(String),
@@ -54,24 +57,24 @@ pub enum Val {
     Cha(char),
     Boo(bool),
     Lst(Vec<Val>),
-    Map(HashMap<Val, Val>),
+    Map(HashMap<String, Box<Val>>),
     Tup(Vec<Val>),
     Sys(Sys),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct Blk(Vec<Line>);
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct Line(Vec<LnElem>);
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct Sys {
     pub input: Type,
     pub block: Blk,
     pub out: Type,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub enum LnElem {
     Cmd(Cmd),
     Pipe,
@@ -80,11 +83,11 @@ pub enum LnElem {
     Combine,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct Cmd {
     pub main: Acc,
     pub args: Vec<Acc>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Clone)]
 pub struct Acc(Vec<String>);

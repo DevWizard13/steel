@@ -1,13 +1,13 @@
 use libsteel::*;
-use ron;
+use ron::*;
 use untwine::{self, parser, parser_repl};
 
 fn main() {
-    println!("{:?}", parser_repl(dec));
+    println!("{:?}", parser_repl(program));
 }
 
 parser! {
-    pub program: decs=dec$(ws)+ -> Ast { Ast::new(decs) }
+    pub program: decs=dec$(comment | ws)+ -> Ast { Ast::new(decs) }
 
     pub dec: ident=id ws "=" ws value=val -> Dec { Dec {id: ident.to_string(), val: value} }
     id=<'a'-'z' ('a'-'z' | '0'-'9' | "_")*> -> &str;
@@ -27,6 +27,15 @@ parser! {
         "boo" => Type::Boo,
     } -> Type;
 
+    complex_typ: outer=<id+> "[" inner = typ$","+ "]" -> Type {
+        match outer {
+            "lst" => Type::Lst(Box::new(inner[0].clone())),
+            "tup" => Type::Tup(inner),
+            "map" => Type::Map(Box::new(inner[0].clone()), Box::new(inner[1].clone())),
+            "sys" => Type::Sys(Box::new(inner[0].clone()), Box::new(inner[1].clone())),
+            other => Type::Custom(other.to_string(), inner)
+         }
+    }
     str_char=("\\" escape | [^"\"\\"]) -> char;
     escape = match {
         "n" => '\n',
@@ -39,6 +48,7 @@ parser! {
         },
         c=[^"u"] => c,
     } -> char;
-    num=<'0'-'9'> -> &str;
+    num = <'0'-'9'> -> &str;
     ws = #["\t "]*;
+    comment = '#' #[^"\n"];
 }

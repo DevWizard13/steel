@@ -80,7 +80,7 @@ a - and a >, or != appear as a not equals sign rather than a ! and a =).
 
 Zed does this, and Zed is also the best editor I've ever used. It's like if
 the people who made VS Code actually cared, used high-performance tools, and
-actually considered people who like vim keybindings. I use recommend it. IMO,
+actually considered people who like vim keybindings. I use and recommend it. IMO,
 it's for you regardless of if you're a power user or just a regular programmer.
 
 ## Style Guides
